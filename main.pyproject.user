@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.14.0, 2021-02-19T08:25:31. -->
+<!-- Written by QtCreator 4.14.0, 2021-03-01T10:06:18. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -167,16 +167,16 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration./Users/henrythornley/QTApps/ScanTubesApp/main.py</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/Users/henrythornley/QTApps/ScanTubesApp/main.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">blueBack2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration./Users/henrythornley/Documents/GIT/Accesion Tool/Images/blueBack.jpg</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/Users/henrythornley/Documents/GIT/Accesion Tool/Images/blueBack.jpg</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">{ed522f20-6a22-4ba5-b651-b88c70b35937}</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">/Users/henrythornley/QTApps/ScanTubesApp/main.py</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script">/Users/henrythornley/Documents/GIT/Accesion Tool/Images/blueBack.jpg</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/Users/henrythornley/QTApps/ScanTubesApp</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/Users/henrythornley/Documents/GIT/Accesion Tool/Images</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.1">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -239,16 +239,15 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">BlueBackground</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration./Users/henrythornley/QTApps/ScanTubesApp/Images/BlueBackground.jpg</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/Users/henrythornley/QTApps/ScanTubesApp/Images/BlueBackground.jpg</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">{ed522f20-6a22-4ba5-b651-b88c70b35937}</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">/Users/henrythornley/QTApps/ScanTubesApp/Images/BlueBackground.jpg</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">lightblueback2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration./Users/henrythornley/Documents/GIT/Accesion Tool/Images/lightblueback.jpg</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/Users/henrythornley/Documents/GIT/Accesion Tool/Images/lightblueback.jpg</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script">/Users/henrythornley/Documents/GIT/Accesion Tool/Images/lightblueback.jpg</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/Users/henrythornley/QTApps/ScanTubesApp/Images</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/Users/henrythornley/Documents/GIT/Accesion Tool/Images</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.2">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -311,16 +310,15 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">lightblueback</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration./Users/henrythornley/QTApps/ScanTubesApp/Images/lightblueback.jpg</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/Users/henrythornley/QTApps/ScanTubesApp/Images/lightblueback.jpg</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">{ed522f20-6a22-4ba5-b651-b88c70b35937}</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">/Users/henrythornley/QTApps/ScanTubesApp/Images/lightblueback.jpg</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">BlueBackground2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration./Users/henrythornley/Documents/GIT/Accesion Tool/Images/BlueBackground.jpg</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/Users/henrythornley/Documents/GIT/Accesion Tool/Images/BlueBackground.jpg</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script">/Users/henrythornley/Documents/GIT/Accesion Tool/Images/BlueBackground.jpg</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/Users/henrythornley/QTApps/ScanTubesApp/Images</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/Users/henrythornley/Documents/GIT/Accesion Tool/Images</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.3">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -383,16 +381,15 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">blueBack</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration./Users/henrythornley/QTApps/ScanTubesApp/Images/blueBack.jpg</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/Users/henrythornley/QTApps/ScanTubesApp/Images/blueBack.jpg</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">{ed522f20-6a22-4ba5-b651-b88c70b35937}</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">/Users/henrythornley/QTApps/ScanTubesApp/Images/blueBack.jpg</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">waiting_scan_loader2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration./Users/henrythornley/Documents/GIT/Accesion Tool/animations/waiting_scan_loader.gif</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/Users/henrythornley/Documents/GIT/Accesion Tool/animations/waiting_scan_loader.gif</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script">/Users/henrythornley/Documents/GIT/Accesion Tool/animations/waiting_scan_loader.gif</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/Users/henrythornley/QTApps/ScanTubesApp/Images</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/Users/henrythornley/Documents/GIT/Accesion Tool/animations</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.4">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -455,16 +452,15 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">waiting_scan_loader</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration./Users/henrythornley/QTApps/ScanTubesApp/animations/waiting_scan_loader.gif</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/Users/henrythornley/QTApps/ScanTubesApp/animations/waiting_scan_loader.gif</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">{ed522f20-6a22-4ba5-b651-b88c70b35937}</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">/Users/henrythornley/QTApps/ScanTubesApp/animations/waiting_scan_loader.gif</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration./Users/henrythornley/Documents/GIT/Accesion Tool/main.py</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/Users/henrythornley/Documents/GIT/Accesion Tool/main.py</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script">/Users/henrythornley/Documents/GIT/Accesion Tool/main.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/Users/henrythornley/QTApps/ScanTubesApp/animations</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/Users/henrythornley/Documents/GIT/Accesion Tool</value>
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">5</value>
   </valuemap>

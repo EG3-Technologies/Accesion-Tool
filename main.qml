@@ -227,7 +227,7 @@ Window {
             width: 1920
             height: 64
             color: "#ffffff"
-            text: qsTr("SpectraPass IRB Tool")
+            text: qsTr("SpectraPass Accessioning")
             font.pixelSize: 55
             horizontalAlignment: Text.AlignHCenter
             font.bold: true
@@ -447,6 +447,18 @@ Window {
                 width: 329
                 height: 23
                 text: qsTr("User's Barcode")
+                font.pixelSize: 19
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            Text {
+                id: user_barcode_lbl1
+                x: 437
+                y: 455
+                width: 329
+                height: 23
+                text: qsTr("Test Tubes Barcode")
                 font.pixelSize: 19
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -853,12 +865,28 @@ Window {
                         }
                     }
 
+
+
                     Text {
                         x: 5
+                        z: 1
                         text: well
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.bold: true
                     }
+
+
+                }
+                Rectangle {
+                    x: 45
+                    y: 45
+
+                    width: 20
+                    height: 20
+                    radius: 40
+                    z: 0
+                    //anchors.horizontalCenter: parent.horizontalCenter
+                    visible: false//well === "B2" ? true : false
                 }
             }
             cellWidth: 70
@@ -974,6 +1002,7 @@ Window {
         radius: 15
         border.color: "#bec5e3"
         border.width: 13
+        z: 0
 
         Text {
             id: text1
@@ -1049,9 +1078,9 @@ Window {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                   confirm_scan_modal.visible = false
-                   modal_background.visible = false
-                   scan_input.text = ""
+                    confirm_scan_modal.visible = false
+                    modal_background.visible = false
+                    scan_input.text = ""
                 }
             }
 
@@ -1196,6 +1225,6 @@ Window {
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.5}D{i:74}D{i:78}D{i:79}D{i:80}D{i:81}D{i:87}
+    D{i:0;formeditorZoom:0.5}
 }
 ##^##*/

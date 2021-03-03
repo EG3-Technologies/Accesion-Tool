@@ -62,6 +62,17 @@ Window {
         return  { "filename": current_directory + backup_filename + current_date_format + ".json", "directory" : current_directory }
     }
 
+    function populate_date_field(){
+        var current_datetime = new Date();
+        var hours = current_datetime.getHours()
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        var current_date_format = ("0" + current_datetime.getDate()).slice(-2)  + "/" + ("0" + (current_datetime.getMonth()+1)).slice(-2) + "/" + current_datetime.getFullYear() + " " +
+                ("0" + hours).slice(-2) + ":" + ("0" + current_datetime.getMinutes()).slice(-2) + " " + ampm.toUpperCase()
+        date_time_label.text = current_date_format
+    }
+
     Component.onCompleted: {
         reset_data()
         scan_input.forceActiveFocus()
@@ -91,6 +102,8 @@ Window {
                         current_scan_json.ttuid = "C"
                         well_model.append(current_scan_json)
                         barcode_data.push(JSON.stringify(current_scan_json))
+                        barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well+'" }')
+                        barcode_tubes.push('{"ttuid": "'+current_scan_json.ttuid+'", "well": "'+current_scan_json.well+'" }')
                         var data_tubes = '{"rackid": "' + rack_id + '", "data": [' + barcode_tubes + ']}'
                         var data_sid = '{"rackid": "' + rack_id + '", "data": [' + barcode_users + ']}'                        //Advnace well position
                         if(well_col % 4 === 0){
@@ -108,6 +121,7 @@ Window {
                 if(status_text.text === label_waiting_rackid){
                     //Rack ID
                     print("setting rack id")
+                    populate_date_field()
                     rack_id = scan_input.text
                     rack_id_lbl.text = label_rack_id + rack_id
                     status_text.text = label_waiting_id
@@ -265,16 +279,16 @@ Window {
         Rectangle {
             id: print_area
             x: 469
-            y: 106
+            y: 49
             width: 816
-            height: 828
+            height: 885
             color: "#ffffff"
-            border.width: 2
+            border.width: 0
 
             Image {
                 id: barcode_tubes_img
-                x: 437
-                y: 484
+                x: 457
+                y: 550
                 width: 329
                 height: 329
                 source: "current_tubes_barcode.png"
@@ -291,7 +305,7 @@ Window {
                 id: barcode_users_img
                 cache: false
                 x: 31
-                y: 481
+                y: 549
                 width: 329
                 height: 329
                 source: "current_users_barcode.png"
@@ -303,21 +317,11 @@ Window {
                 }
             }
 
-            Image {
-                id: waiting_img
-                x: 341
-                y: -66
-                width: 136
-                height: 38
-                source: "animations/waiting_scan_loader.gif"
-                fillMode: Image.PreserveAspectFit
-            }
-
             GridView {
                 id: rack_grid
                 objectName: "rack_grid"
                 x: 12
-                y: 22
+                y: 80
                 width: 793
                 height: 404
                 flickableDirection: Flickable.VerticalFlick
@@ -406,12 +410,13 @@ Window {
 
                 Component.onCompleted: {
                     well_model.clear()
-                    /*print("appending")
+                    print("appending")
+                    /*populate_date_field()
                     var barcode_data = ""
                     var well_row = 'A'
                     var well_col = 1
                     var spectra_id = Math.random().toString(36).substr(2,13).toUpperCase()
-                    for(var i = 1; i <= 44; i++){
+                    for(var i = 1; i <= max_tube_count; i++){
                         print("appending")
                         if(barcode_data.length === 1){
                             barcode_data = barcode_data + "/"
@@ -423,7 +428,10 @@ Window {
                         }
                         var tube_id = Math.random().toString(36).substr(2,13).toUpperCase()
                         barcode_data = barcode_data + "" + spectra_id + "+" + tube_id  +"/"
-                        well_model.append({"location": position, "name":spectra_id,"ttuid": tube_id})
+                        current_scan_json.well = position
+                        current_scan_json.ttuid = tube_id
+                        current_scan_json.sid = spectra_id
+                        well_model.append(current_scan_json)
                         if(well_col % 4 === 0){
                             well_row = String.fromCharCode(well_row.charCodeAt() + 1);
                             well_col = 1
@@ -443,7 +451,7 @@ Window {
             Text {
                 id: user_barcode_lbl
                 x: 31
-                y: 455
+                y: 525
                 width: 329
                 height: 23
                 text: qsTr("User's Barcode")
@@ -454,8 +462,8 @@ Window {
 
             Text {
                 id: user_barcode_lbl1
-                x: 437
-                y: 455
+                x: 457
+                y: 526
                 width: 329
                 height: 23
                 text: qsTr("Test Tubes Barcode")
@@ -464,55 +472,72 @@ Window {
                 verticalAlignment: Text.AlignVCenter
             }
 
+            Text {
+                id: rack_id_lbl
+                x: 31
+                y: 8
+                width: 290
+                height: 22
+                color: "#000000"
+                text: qsTr("Rack ID:  ABCDEFGHIJKL")
+                font.pixelSize: 16
+                style: Text.Raised
+                font.styleName: "Bold"
+                font.weight: Font.Bold
+                styleColor: "#0712a7"
+                font.family: "Verdana"
+                font.bold: true
+            }
+
+            Text {
+                id: test_tube_count_lbl
+                x: 333
+                y: 8
+                width: 201
+                height: 22
+                color: "#000000"
+                text: qsTr("Test Tube Count:")
+                font.pixelSize: 16
+                style: Text.Raised
+                styleColor: "#000000"
+                font.bold: true
+                font.styleName: "Bold"
+                font.weight: Font.Bold
+                font.family: "Verdana"
+            }
+
+            Image {
+                id: image
+                x: 614
+                y: 2
+                width: 201
+                height: 28
+                source: "Images/spectrapass_logo.png"
+                mirror: false
+                sourceSize.height: 54
+                smooth: true
+                autoTransform: false
+                fillMode: Image.PreserveAspectFit
+            }
+
+            Text {
+                id: date_time_label
+                x: 637
+                y: 30
+                width: 155
+                height: 15
+                text: qsTr("")
+                font.pixelSize: 13
+                horizontalAlignment: Text.AlignHCenter
+                font.styleName: "Bold"
+            }
+
 
 
 
         }
 
-        Text {
-            id: rack_id_lbl
-            x: 488
-            y: 76
-            width: 348
-            height: 33
-            color: "#000000"
-            text: qsTr("Rack ID:  ABCDEFGHIJKL")
-            font.pixelSize: 27
-            style: Text.Raised
-            font.styleName: "Bold"
-            font.weight: Font.Bold
-            styleColor: "#0712a7"
-            font.family: "Verdana"
-            font.bold: true
-        }
 
-
-
-        Text {
-            id: test_tube_count_lbl
-            x: 937
-            y: 76
-            width: 348
-            height: 33
-            color: "#000000"
-            text: qsTr("Test Tube Count:")
-            font.pixelSize: 27
-            style: Text.Raised
-            styleColor: "#000000"
-            font.bold: true
-            font.styleName: "Bold"
-            font.weight: Font.Bold
-            font.family: "Verdana"
-        }
-
-        Rectangle {
-            id: divider_rect
-            x: 884
-            y: 76
-            width: 4
-            height: 33
-            color: "#ffffff"
-        }
 
         Rectangle {
             id: printManifest
@@ -540,7 +565,7 @@ Window {
 
                     print_area.grabToImage(function(result) {
                         result.saveToFile("something.png");
-                    }, Qt.size( 2350, 2350));
+                    }, Qt.size( 2455, 2792));
 
                     barcode_utils.handle_print()
 

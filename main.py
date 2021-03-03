@@ -3,7 +3,7 @@ import sys
 import os
 
 from PySide2.QtQml import QQmlApplicationEngine
-from PySide2.QtCore import QObject, Slot
+from PySide2.QtCore import QObject, Slot, Qt
 from PySide2 import QtPrintSupport, QtWidgets, QtGui
 from PySide2.QtWidgets import QApplication
 import qrcode
@@ -70,6 +70,7 @@ class BarcodeUtils(QObject):
             print("painting")
             painter = QtGui.QPainter(printer)
             image = QtGui.QImage("something.png")
+
             painter.drawImage(image.rect(), image)
             painter.end()
 

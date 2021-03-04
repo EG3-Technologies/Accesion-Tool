@@ -16,7 +16,7 @@ Window {
     property var barcode_data: []
     property var barcode_users: []
     property var barcode_tubes: []
-    property variant current_scan_json: {"well": "", "sid": "", "ttuid": ""}
+    property variant current_scan_json: {"well": "", "sid": "", "ttuid": "", "datetime" : ""}
     property string rack_id: ""
     property string well_row: "A"
     property variant well_col: 1
@@ -73,6 +73,17 @@ Window {
         date_time_label.text = current_date_format
     }
 
+    function get_datetime_formatted(){
+        var current_datetime = new Date();
+        var hours = current_datetime.getHours()
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        var current_date_format = ("0" + current_datetime.getDate()).slice(-2)  + "/" + ("0" + (current_datetime.getMonth()+1)).slice(-2) + "/" + current_datetime.getFullYear() + " " +
+                ("0" + hours).slice(-2) + ":" + ("0" + current_datetime.getMinutes()).slice(-2) + " " + ampm.toUpperCase()
+        return current_date_format
+    }
+
     Component.onCompleted: {
         reset_data()
         scan_input.forceActiveFocus()
@@ -100,6 +111,7 @@ Window {
                         current_scan_json.well = well_row + well_col
                         current_scan_json.sid = "C"
                         current_scan_json.ttuid = "C"
+                        current_scan_json.datetime = get_datetime_formatted()
                         well_model.append(current_scan_json)
                         barcode_data.push(JSON.stringify(current_scan_json))
                         barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well+'" }')
@@ -116,6 +128,7 @@ Window {
                         current_scan_json.well = ""
                         current_scan_json.sid = ""
                         current_scan_json.ttuid = ""
+                        current_scan_json.datetime = ""
                     }
                 }
                 if(status_text.text === label_waiting_rackid){
@@ -139,6 +152,7 @@ Window {
                     status_text.text = label_waiting_tube
                 }else if(status_text.text === label_waiting_tube){
                     current_scan_json.ttuid = scan_input.text
+                    current_scan_json.datetime = get_datetime_formatted()
                     scan_input.text = ""
                     status_text.text = label_waiting_id
                     if(well_col % 4 === 0){
@@ -159,12 +173,12 @@ Window {
                     current_scan_json.well = ""
                     current_scan_json.sid = ""
                     current_scan_json.ttuid = ""
-
+                    current_scan_json.datetime = ""
                     var data = '{"rackid": "' + rack_id + '", "data": [' + barcode_data + ']}'
                     var data_tubes = '{"rackid": "' + rack_id + '", "data": [' + barcode_tubes + ']}'
                     var data_sid = '{"rackid": "' + rack_id + '", "data": [' + barcode_users + ']}'
                     //var file_data = get_file_name()
-                    barcode_utils.generate_barcode(data_sid, data_tubes, file_directory, file_name)
+                    barcode_utils.generate_barcode(data_sid, data_tubes, barcode_data, file_directory, file_name)
                     barcode_users_img.reloadImage()
                     barcode_tubes_img.reloadImage()
 
@@ -175,6 +189,7 @@ Window {
                             current_scan_json.well = well_row + well_col
                             current_scan_json.sid = "C"
                             current_scan_json.ttuid = "C"
+                            current_scan_json.datetime = get_datetime_formatted()
                             well_model.append(current_scan_json)
                             barcode_data.push(JSON.stringify(current_scan_json))
                             barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well+'" }')
@@ -189,7 +204,7 @@ Window {
                         }
                         data_tubes = '{"rackid": "' + rack_id + '", "data": [' + barcode_tubes + ']}'
                         data_sid = '{"rackid": "' + rack_id + '", "data": [' + barcode_users + ']}'
-                        barcode_utils.generate_barcode(data_sid, data_tubes, file_directory, file_name)
+                        barcode_utils.generate_barcode(data_sid, data_tubes, barcode_data, file_directory, file_name)
 
                     }
                     if(barcode_data.length >= max_tube_count){
@@ -710,6 +725,7 @@ Window {
                             current_scan_json.well = ""
                             current_scan_json.sid = ""
                             current_scan_json.ttuid = ""
+                            current_scan_json.datetime = ""
                             recent_undo = true
                             undo_scan_rect.color = "#222222"
                             undo_scan_rect.update()
@@ -722,6 +738,7 @@ Window {
                             current_scan_json.well = ""
                             current_scan_json.sid = ""
                             current_scan_json.ttuid = ""
+                            current_scan_json.datetime = ""
                             recent_undo = true
 
                             status_text.text = label_waiting_id
@@ -1184,6 +1201,7 @@ Window {
                             current_scan_json.well = ""
                             current_scan_json.sid = ""
                             current_scan_json.ttuid = ""
+                            current_scan_json.datetime = ""
                             recent_undo = true
                             undo_scan_rect.color = "#222222"
                             undo_scan_rect.update()
@@ -1196,6 +1214,7 @@ Window {
                             current_scan_json.well = ""
                             current_scan_json.sid = ""
                             current_scan_json.ttuid = ""
+                            current_scan_json.datetime = ""
                             recent_undo = true
 
                             status_text.text = label_waiting_id

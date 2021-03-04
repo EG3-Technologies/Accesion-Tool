@@ -17,8 +17,8 @@ class BarcodeUtils(QObject):
     def print_data(self, string):
         print(string)
 
-    @Slot(str, str, str, str)
-    def generate_barcode(self, user_barcode, tube_barcode, directory, filename):
+    @Slot(str, str, str, str, str)
+    def generate_barcode(self, user_barcode, tube_barcode, barcode_data, directory, filename):
         #  print(user_barcode)
 
         if not os.path.isdir(directory):
@@ -29,6 +29,9 @@ class BarcodeUtils(QObject):
         backup_file.write("\n")
         backup_file.write("\n")
         backup_file.write(tube_barcode)
+        backup_file.write("\n")
+        backup_file.write("\n")
+        backup_file.write(barcode_data)
         backup_file.close()
 
         data_users_bytes = user_barcode.encode()
@@ -43,6 +46,7 @@ class BarcodeUtils(QObject):
         # print(compressed_data)
         users_barcode_filename = filename.replace(".json", "_users.png")
         tubes_barcode_filename = filename.replace(".json", "_tubes.png")
+
 
         image_users = treepoem.generate_barcode(
           barcode_type='datamatrix',

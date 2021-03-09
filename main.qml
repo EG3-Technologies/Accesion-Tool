@@ -69,7 +69,7 @@ Window {
         var ampm = hours >= 12 ? 'pm' : 'am';
         hours = hours % 12;
         hours = hours ? hours : 12; // the hour '0' should be '12'
-        var current_date_format = ("0" + current_datetime.getMonth()+1).slice(-2)  + "/" + ("0" + (current_datetime.getDate())).slice(-2) + "/" + current_datetime.getFullYear() + " " +
+        var current_date_format = ("0" + (current_datetime.getMonth()+1)).slice(-2)  + "/" + ("0" + (current_datetime.getDate())).slice(-2) + "/" + current_datetime.getFullYear() + " " +
                 ("0" + hours).slice(-2) + ":" + ("0" + current_datetime.getMinutes()).slice(-2) + " " + ampm.toUpperCase()
         date_time_label.text = current_date_format
     }

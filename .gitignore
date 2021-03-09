@@ -14,3 +14,7 @@ src/pip-delete-this-directory.txt
 src/pymaging-png/
 
 src/pymaging/
+
+*.autosave
+
+main.pyproject.user

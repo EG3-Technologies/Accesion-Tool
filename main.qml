@@ -28,6 +28,7 @@ Window {
     property variant calibrant_locations: ["A1","E1", "I1"]
     property variant is_calibrant_locked: true
     property variant recent_undo: false
+    property variant minutes_seconds_map: ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X"]
 
     function reset_data(){
         current_scan_json.well = ""
@@ -55,8 +56,8 @@ Window {
 
     function get_file_name(){
         var current_datetime = new Date();
-        var current_folder_format = current_datetime.getDate()  + "_" + (current_datetime.getMonth()+1) + "_" + current_datetime.getFullYear()
-        var current_date_format = current_datetime.getDate()  + "_" + (current_datetime.getMonth()+1) + "_" + current_datetime.getFullYear() + "_" +
+        var current_folder_format = (current_datetime.getMonth()+1)  + "_" + current_datetime.getDate() + "_" + current_datetime.getFullYear()
+        var current_date_format = (current_datetime.getMonth()+1)  + "_" + current_datetime.getDate() + "_" + current_datetime.getFullYear() + "_" +
                 current_datetime.getHours() + "_" + current_datetime.getMinutes() + "_" + current_datetime.getSeconds()
         var current_directory = "backup/" + current_folder_format + "/"
         return  { "filename": current_directory + backup_filename + current_date_format + ".json", "directory" : current_directory }
@@ -68,7 +69,7 @@ Window {
         var ampm = hours >= 12 ? 'pm' : 'am';
         hours = hours % 12;
         hours = hours ? hours : 12; // the hour '0' should be '12'
-        var current_date_format = ("0" + current_datetime.getDate()).slice(-2)  + "/" + ("0" + (current_datetime.getMonth()+1)).slice(-2) + "/" + current_datetime.getFullYear() + " " +
+        var current_date_format = ("0" + current_datetime.getMonth()+1).slice(-2)  + "/" + ("0" + (current_datetime.getDate())).slice(-2) + "/" + current_datetime.getFullYear() + " " +
                 ("0" + hours).slice(-2) + ":" + ("0" + current_datetime.getMinutes()).slice(-2) + " " + ampm.toUpperCase()
         date_time_label.text = current_date_format
     }
@@ -79,9 +80,23 @@ Window {
         var ampm = hours >= 12 ? 'pm' : 'am';
         hours = hours % 12;
         hours = hours ? hours : 12; // the hour '0' should be '12'
-        var current_date_format = ("0" + current_datetime.getDate()).slice(-2)  + "/" + ("0" + (current_datetime.getMonth()+1)).slice(-2) + "/" + current_datetime.getFullYear() + " " +
+        var current_date_format = ("0" + current_datetime.getMonth()+1).slice(-2)  + "/" + ("0" + (current_datetime.getDate())).slice(-2) + "/" + current_datetime.getFullYear() + " " +
                 ("0" + hours).slice(-2) + ":" + ("0" + current_datetime.getMinutes()).slice(-2) + " " + ampm.toUpperCase()
         return current_date_format
+    }
+
+    function get_time_base60(){
+        var current_datetime = new Date();
+        var hours = minutes_seconds_map[current_datetime.getHours()]
+        var mins = minutes_seconds_map[current_datetime.getMinutes()]
+        var seconds = minutes_seconds_map[current_datetime.getSeconds()]
+        return hours+mins+seconds
+    }
+
+    function get_date(){
+        var current_datetime = new Date();
+        var date = ("0" + current_datetime.getMonth()+1).slice(-2)  + "/" + ("0" + (current_datetime.getDate())).slice(-2) + "/" + current_datetime.getFullYear();
+        return date;
     }
 
     Component.onCompleted: {
@@ -114,9 +129,9 @@ Window {
                         current_scan_json.datetime = get_datetime_formatted()
                         well_model.append(current_scan_json)
                         barcode_data.push(JSON.stringify(current_scan_json))
-                        barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well+'" }')
+                        barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well +'", "t": "'+get_time_base60() + '" }')
                         barcode_tubes.push('{"ttuid": "'+current_scan_json.ttuid+'", "well": "'+current_scan_json.well+'" }')
-                        var data_tubes = '{"rackid": "' + rack_id + '", "data": [' + barcode_tubes + ']}'
+                        var data_tubes = '{"rackid": "' + rack_id + '","' +'"date":'+  +'",data": [' + barcode_tubes + ']}'
                         var data_sid = '{"rackid": "' + rack_id + '", "data": [' + barcode_users + ']}'                        //Advnace well position
                         if(well_col % 4 === 0){
                             well_row = String.fromCharCode(well_row.charCodeAt() + 1);
@@ -166,7 +181,7 @@ Window {
 
                     well_model.append(current_scan_json)
                     barcode_data.push(JSON.stringify(current_scan_json))
-                    barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well+'" }')
+                    barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well +'", "t": "'+get_time_base60() + '" }')
                     barcode_tubes.push('{"ttuid": "'+current_scan_json.ttuid+'", "well": "'+current_scan_json.well+'" }')
                     sid_confirmation_label.text = current_scan_json.sid
                     ttuid_confirmation_label.text = current_scan_json.ttuid
@@ -175,9 +190,9 @@ Window {
                     current_scan_json.ttuid = ""
                     current_scan_json.datetime = ""
                     var data = '{"rackid": "' + rack_id + '", "data": [' + barcode_data + ']}'
-                    var data_tubes = '{"rackid": "' + rack_id + '", "data": [' + barcode_tubes + ']}'
+
+                    var data_tubes = '{"rackid": "' + rack_id + '",' + '"date":"'+ get_date() +'","data": [' + barcode_tubes + ']}'
                     var data_sid = '{"rackid": "' + rack_id + '", "data": [' + barcode_users + ']}'
-                    //var file_data = get_file_name()
                     barcode_utils.generate_barcode(data_sid, data_tubes, barcode_data, file_directory, file_name)
                     barcode_users_img.reloadImage()
                     barcode_tubes_img.reloadImage()
@@ -192,9 +207,10 @@ Window {
                             current_scan_json.datetime = get_datetime_formatted()
                             well_model.append(current_scan_json)
                             barcode_data.push(JSON.stringify(current_scan_json))
-                            barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well+'" }')
+                            barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well +'", "t": "'+get_time_base60() + '" }')
                             barcode_tubes.push('{"ttuid": "'+current_scan_json.ttuid+'", "well": "'+current_scan_json.well+'" }')
-                            //Advnace well position
+                            var data_tubes = '{"rackid": "' + rack_id + '","' +'"date":'+ get_date() +'",data": [' + barcode_tubes + ']}'
+                                                        //Advnace well position
                             if(well_col % 4 === 0){
                                 well_row = String.fromCharCode(well_row.charCodeAt() + 1);
                                 well_col = 1
@@ -202,7 +218,7 @@ Window {
                                 well_col++
                             }
                         }
-                        data_tubes = '{"rackid": "' + rack_id + '", "data": [' + barcode_tubes + ']}'
+                        data_tubes = '{"rackid": "' + rack_id + '","' +'"date":'+ get_date() +'",data": [' + barcode_tubes + ']}'
                         data_sid = '{"rackid": "' + rack_id + '", "data": [' + barcode_users + ']}'
                         barcode_utils.generate_barcode(data_sid, data_tubes, barcode_data, file_directory, file_name)
 
@@ -1266,6 +1282,8 @@ Window {
 
     }
 }
+
+
 
 /*##^##
 Designer {

@@ -31,6 +31,8 @@ Window {
     property variant minutes_seconds_map: ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X"]
 
     function reset_data(){
+        date_time_label.text = ""
+        rack_id_lbl.text = ""
         current_scan_json.well = ""
         current_scan_json.sid = ""
         current_scan_json.ttuid = ""
@@ -817,7 +819,8 @@ Window {
                 anchors.fill: parent
                 onClicked: {
                     print("new rack creation")
-                    reset_data()
+                    confirm_new_rack_modal.visible = true
+                    modal_background.visible = true
                 }
             }
 
@@ -1300,6 +1303,132 @@ Window {
 
 
 
+    }
+
+    Rectangle {
+        id: confirm_new_rack_modal
+        x: 506
+        y: 442
+        width: 909
+        height: 197
+        visible: false
+        color: "#ffffff"
+        radius: 15
+        border.color: "#bec5e3"
+        border.width: 13
+        z: 0
+        Text {
+            id: text11
+            x: 18
+            y: 12
+            width: 878
+            height: 84
+            text: qsTr("Start New Rack?")
+            font.pixelSize: 36
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.Wrap
+            font.weight: Font.Bold
+            font.family: "Courier"
+        }
+
+        Rectangle {
+            id: yes_new_rack_button
+            x: 18
+            y: 102
+            width: 351
+            height: 68
+            visible: true
+            radius: 9
+            gradient: Gradient {
+                GradientStop {
+                    position: 0
+                    color: "#034fc9"
+                }
+
+                GradientStop {
+                    position: 1
+                    color: "#195cc8"
+                }
+            }
+            Text {
+                id: confirm_scan4
+                x: 4
+                y: 2
+                width: 347
+                height: 68
+                color: "#ffffff"
+                text: qsTr("Yes")
+                font.pixelSize: 47
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                font.weight: Font.Bold
+                font.styleName: "Bold"
+                minimumPixelSize: 23
+                styleColor: "#011ca1"
+                textFormat: Text.PlainText
+                style: Text.Raised
+                font.family: "Times New Roman"
+                font.bold: true
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    reset_data()
+                    modal_background.visible = false
+                    confirm_new_rack_modal.visible = false
+                }
+            }
+
+        }
+
+        Rectangle {
+            id: no_new_rack_button
+            x: 545
+            y: 102
+            width: 351
+            height: 68
+            radius: 9
+            gradient: Gradient {
+                GradientStop {
+                    position: 0
+                    color: "#034fc9"
+                }
+
+                GradientStop {
+                    position: 1
+                    color: "#195cc8"
+                }
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    modal_background.visible = false
+                    confirm_new_rack_modal.visible = false
+                }
+            }
+
+            Text {
+                id: confirm_scan5
+                x: 4
+                y: 2
+                width: 347
+                height: 68
+                color: "#ffffff"
+                text: qsTr("No")
+                font.pixelSize: 47
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                font.styleName: "Bold"
+                font.weight: Font.Bold
+                minimumPixelSize: 23
+                styleColor: "#011ca1"
+                textFormat: Text.PlainText
+                style: Text.Raised
+                font.family: "Times New Roman"
+                font.bold: true
+            }
+        }
     }
 }
 

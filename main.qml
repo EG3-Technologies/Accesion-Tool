@@ -16,7 +16,7 @@ Window {
     property var barcode_data: []
     property var barcode_users: []
     property var barcode_tubes: []
-    property variant current_scan_json: {"well": "", "sid": "", "ttuid": ""}
+    property variant current_scan_json: {"well": "", "sid": "", "ttuid": "", "datetime" : ""}
     property string rack_id: ""
     property string well_row: "A"
     property variant well_col: 1
@@ -28,8 +28,11 @@ Window {
     property variant calibrant_locations: ["A1","E1", "I1"]
     property variant is_calibrant_locked: true
     property variant recent_undo: false
+    property variant minutes_seconds_map: ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X"]
 
     function reset_data(){
+        date_time_label.text = ""
+        rack_id_lbl.text = ""
         current_scan_json.well = ""
         current_scan_json.sid = ""
         current_scan_json.ttuid = ""
@@ -55,8 +58,8 @@ Window {
 
     function get_file_name(){
         var current_datetime = new Date();
-        var current_folder_format = current_datetime.getDate()  + "_" + (current_datetime.getMonth()+1) + "_" + current_datetime.getFullYear()
-        var current_date_format = current_datetime.getDate()  + "_" + (current_datetime.getMonth()+1) + "_" + current_datetime.getFullYear() + "_" +
+        var current_folder_format = (current_datetime.getMonth()+1)  + "_" + current_datetime.getDate() + "_" + current_datetime.getFullYear()
+        var current_date_format = (current_datetime.getMonth()+1)  + "_" + current_datetime.getDate() + "_" + current_datetime.getFullYear() + "_" +
                 current_datetime.getHours() + "_" + current_datetime.getMinutes() + "_" + current_datetime.getSeconds()
         var current_directory = "backup/" + current_folder_format + "/"
         return  { "filename": current_directory + backup_filename + current_date_format + ".json", "directory" : current_directory }
@@ -68,9 +71,34 @@ Window {
         var ampm = hours >= 12 ? 'pm' : 'am';
         hours = hours % 12;
         hours = hours ? hours : 12; // the hour '0' should be '12'
-        var current_date_format = ("0" + current_datetime.getDate()).slice(-2)  + "/" + ("0" + (current_datetime.getMonth()+1)).slice(-2) + "/" + current_datetime.getFullYear() + " " +
+        var current_date_format = ("0" + (current_datetime.getMonth()+1)).slice(-2)  + "/" + ("0" + current_datetime.getDate()).slice(-2) + "/" + current_datetime.getFullYear() + " " +
                 ("0" + hours).slice(-2) + ":" + ("0" + current_datetime.getMinutes()).slice(-2) + " " + ampm.toUpperCase()
         date_time_label.text = current_date_format
+    }
+
+    function get_datetime_formatted(){
+        var current_datetime = new Date();
+        var hours = current_datetime.getHours()
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        var current_date_format = ("0" + (current_datetime.getMonth()+1)).slice(-2)  + "/" + ("0" + current_datetime.getDate()).slice(-2) + "/" + current_datetime.getFullYear() + " " +
+                ("0" + hours).slice(-2) + ":" + ("0" + current_datetime.getMinutes()).slice(-2) + " " + ampm.toUpperCase()
+        return current_date_format
+    }
+
+    function get_time_base60(){
+        var current_datetime = new Date();
+        var hours = minutes_seconds_map[current_datetime.getHours()]
+        var mins = minutes_seconds_map[current_datetime.getMinutes()]
+        var seconds = minutes_seconds_map[current_datetime.getSeconds()]
+        return hours+mins+seconds
+    }
+
+    function get_date(){
+        var current_datetime = new Date();
+        var date = ("0" + (current_datetime.getMonth()+1)).slice(-2)  + "/" + ("0" + current_datetime.getDate()).slice(-2) + "/" + current_datetime.getFullYear();
+        return date;
     }
 
     Component.onCompleted: {
@@ -100,11 +128,12 @@ Window {
                         current_scan_json.well = well_row + well_col
                         current_scan_json.sid = "C"
                         current_scan_json.ttuid = "C"
+                        current_scan_json.datetime = get_datetime_formatted()
                         well_model.append(current_scan_json)
                         barcode_data.push(JSON.stringify(current_scan_json))
-                        barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well+'" }')
+                        barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well +'", "t": "'+get_time_base60() + '" }')
                         barcode_tubes.push('{"ttuid": "'+current_scan_json.ttuid+'", "well": "'+current_scan_json.well+'" }')
-                        var data_tubes = '{"rackid": "' + rack_id + '", "data": [' + barcode_tubes + ']}'
+                        var data_tubes = '{"rackid": "' + rack_id + '","' +'"date":'+  +'",data": [' + barcode_tubes + ']}'
                         var data_sid = '{"rackid": "' + rack_id + '", "data": [' + barcode_users + ']}'                        //Advnace well position
                         if(well_col % 4 === 0){
                             well_row = String.fromCharCode(well_row.charCodeAt() + 1);
@@ -116,6 +145,7 @@ Window {
                         current_scan_json.well = ""
                         current_scan_json.sid = ""
                         current_scan_json.ttuid = ""
+                        current_scan_json.datetime = ""
                     }
                 }
                 if(status_text.text === label_waiting_rackid){
@@ -139,6 +169,7 @@ Window {
                     status_text.text = label_waiting_tube
                 }else if(status_text.text === label_waiting_tube){
                     current_scan_json.ttuid = scan_input.text
+                    current_scan_json.datetime = get_datetime_formatted()
                     scan_input.text = ""
                     status_text.text = label_waiting_id
                     if(well_col % 4 === 0){
@@ -152,19 +183,19 @@ Window {
 
                     well_model.append(current_scan_json)
                     barcode_data.push(JSON.stringify(current_scan_json))
-                    barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well+'" }')
+                    barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well +'", "t": "'+get_time_base60() + '" }')
                     barcode_tubes.push('{"ttuid": "'+current_scan_json.ttuid+'", "well": "'+current_scan_json.well+'" }')
                     sid_confirmation_label.text = current_scan_json.sid
                     ttuid_confirmation_label.text = current_scan_json.ttuid
                     current_scan_json.well = ""
                     current_scan_json.sid = ""
                     current_scan_json.ttuid = ""
-
+                    current_scan_json.datetime = ""
                     var data = '{"rackid": "' + rack_id + '", "data": [' + barcode_data + ']}'
-                    var data_tubes = '{"rackid": "' + rack_id + '", "data": [' + barcode_tubes + ']}'
+
+                    var data_tubes = '{"rackid": "' + rack_id + '",' + '"date":"'+ get_date() +'","data": [' + barcode_tubes + ']}'
                     var data_sid = '{"rackid": "' + rack_id + '", "data": [' + barcode_users + ']}'
-                    //var file_data = get_file_name()
-                    barcode_utils.generate_barcode(data_sid, data_tubes, file_directory, file_name)
+                    barcode_utils.generate_barcode(data_sid, data_tubes, barcode_data, file_directory, file_name)
                     barcode_users_img.reloadImage()
                     barcode_tubes_img.reloadImage()
 
@@ -175,10 +206,12 @@ Window {
                             current_scan_json.well = well_row + well_col
                             current_scan_json.sid = "C"
                             current_scan_json.ttuid = "C"
+                            current_scan_json.datetime = get_datetime_formatted()
                             well_model.append(current_scan_json)
                             barcode_data.push(JSON.stringify(current_scan_json))
-                            barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well+'" }')
+                            barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well +'", "t": "'+get_time_base60() + '" }')
                             barcode_tubes.push('{"ttuid": "'+current_scan_json.ttuid+'", "well": "'+current_scan_json.well+'" }')
+                            var data_tubes = '{"rackid": "' + rack_id + '","' +'"date":'+ get_date() +'",data": [' + barcode_tubes + ']}'
                             //Advnace well position
                             if(well_col % 4 === 0){
                                 well_row = String.fromCharCode(well_row.charCodeAt() + 1);
@@ -187,9 +220,9 @@ Window {
                                 well_col++
                             }
                         }
-                        data_tubes = '{"rackid": "' + rack_id + '", "data": [' + barcode_tubes + ']}'
+                        data_tubes = '{"rackid": "' + rack_id + '","' +'"date":'+ get_date() +'",data": [' + barcode_tubes + ']}'
                         data_sid = '{"rackid": "' + rack_id + '", "data": [' + barcode_users + ']}'
-                        barcode_utils.generate_barcode(data_sid, data_tubes, file_directory, file_name)
+                        barcode_utils.generate_barcode(data_sid, data_tubes, barcode_data, file_directory, file_name)
 
                     }
                     if(barcode_data.length >= max_tube_count){
@@ -288,7 +321,7 @@ Window {
             Image {
                 id: barcode_tubes_img
                 x: 457
-                y: 550
+                y: 554
                 width: 329
                 height: 329
                 source: "current_tubes_barcode.png"
@@ -305,7 +338,7 @@ Window {
                 id: barcode_users_img
                 cache: false
                 x: 31
-                y: 549
+                y: 553
                 width: 329
                 height: 329
                 source: "current_users_barcode.png"
@@ -321,7 +354,7 @@ Window {
                 id: rack_grid
                 objectName: "rack_grid"
                 x: 12
-                y: 80
+                y: 87
                 width: 793
                 height: 404
                 flickableDirection: Flickable.VerticalFlick
@@ -451,10 +484,10 @@ Window {
             Text {
                 id: user_barcode_lbl
                 x: 31
-                y: 525
+                y: 528
                 width: 329
                 height: 23
-                text: qsTr("User's Barcode")
+                text: qsTr("SID Barcode")
                 font.pixelSize: 19
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -463,10 +496,10 @@ Window {
             Text {
                 id: user_barcode_lbl1
                 x: 457
-                y: 526
+                y: 531
                 width: 329
                 height: 23
-                text: qsTr("Test Tubes Barcode")
+                text: qsTr("TTUID Barcode")
                 font.pixelSize: 19
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -474,8 +507,8 @@ Window {
 
             Text {
                 id: rack_id_lbl
-                x: 31
-                y: 8
+                x: 8
+                y: 5
                 width: 290
                 height: 22
                 color: "#000000"
@@ -491,8 +524,8 @@ Window {
 
             Text {
                 id: test_tube_count_lbl
-                x: 333
-                y: 8
+                x: 335
+                y: 5
                 width: 201
                 height: 22
                 color: "#000000"
@@ -532,6 +565,26 @@ Window {
                 font.styleName: "Bold"
             }
 
+            Text {
+                id: text10
+                x: 324
+                y: 48
+                width: 313
+                height: 41
+                text: qsTr("Print: ______________________")
+                font.pixelSize: 26
+            }
+
+            Text {
+                id: text9
+                x: 8
+                y: 47
+                width: 309
+                height: 41
+                text: qsTr("Sign: ______________________")
+                font.pixelSize: 26
+            }
+
 
 
 
@@ -565,7 +618,7 @@ Window {
 
                     print_area.grabToImage(function(result) {
                         result.saveToFile("something.png");
-                    }, Qt.size( 4900, 5414));
+                    }, Qt.size( 2455, 2792));
 
                     barcode_utils.handle_print()
 
@@ -710,6 +763,7 @@ Window {
                             current_scan_json.well = ""
                             current_scan_json.sid = ""
                             current_scan_json.ttuid = ""
+                            current_scan_json.datetime = ""
                             recent_undo = true
                             undo_scan_rect.color = "#222222"
                             undo_scan_rect.update()
@@ -722,6 +776,7 @@ Window {
                             current_scan_json.well = ""
                             current_scan_json.sid = ""
                             current_scan_json.ttuid = ""
+                            current_scan_json.datetime = ""
                             recent_undo = true
 
                             status_text.text = label_waiting_id
@@ -764,7 +819,8 @@ Window {
                 anchors.fill: parent
                 onClicked: {
                     print("new rack creation")
-                    reset_data()
+                    confirm_new_rack_modal.visible = true
+                    modal_background.visible = true
                 }
             }
 
@@ -1184,6 +1240,7 @@ Window {
                             current_scan_json.well = ""
                             current_scan_json.sid = ""
                             current_scan_json.ttuid = ""
+                            current_scan_json.datetime = ""
                             recent_undo = true
                             undo_scan_rect.color = "#222222"
                             undo_scan_rect.update()
@@ -1196,6 +1253,7 @@ Window {
                             current_scan_json.well = ""
                             current_scan_json.sid = ""
                             current_scan_json.ttuid = ""
+                            current_scan_json.datetime = ""
                             recent_undo = true
 
                             status_text.text = label_waiting_id
@@ -1246,10 +1304,138 @@ Window {
 
 
     }
+
+    Rectangle {
+        id: confirm_new_rack_modal
+        x: 506
+        y: 442
+        width: 909
+        height: 197
+        visible: false
+        color: "#ffffff"
+        radius: 15
+        border.color: "#bec5e3"
+        border.width: 13
+        z: 0
+        Text {
+            id: text11
+            x: 18
+            y: 12
+            width: 878
+            height: 84
+            text: qsTr("Start New Rack?")
+            font.pixelSize: 36
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.Wrap
+            font.weight: Font.Bold
+            font.family: "Courier"
+        }
+
+        Rectangle {
+            id: yes_new_rack_button
+            x: 18
+            y: 102
+            width: 351
+            height: 68
+            visible: true
+            radius: 9
+            gradient: Gradient {
+                GradientStop {
+                    position: 0
+                    color: "#034fc9"
+                }
+
+                GradientStop {
+                    position: 1
+                    color: "#195cc8"
+                }
+            }
+            Text {
+                id: confirm_scan4
+                x: 4
+                y: 2
+                width: 347
+                height: 68
+                color: "#ffffff"
+                text: qsTr("Yes")
+                font.pixelSize: 47
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                font.weight: Font.Bold
+                font.styleName: "Bold"
+                minimumPixelSize: 23
+                styleColor: "#011ca1"
+                textFormat: Text.PlainText
+                style: Text.Raised
+                font.family: "Times New Roman"
+                font.bold: true
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    reset_data()
+                    modal_background.visible = false
+                    confirm_new_rack_modal.visible = false
+                }
+            }
+
+        }
+
+        Rectangle {
+            id: no_new_rack_button
+            x: 545
+            y: 102
+            width: 351
+            height: 68
+            radius: 9
+            gradient: Gradient {
+                GradientStop {
+                    position: 0
+                    color: "#034fc9"
+                }
+
+                GradientStop {
+                    position: 1
+                    color: "#195cc8"
+                }
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    modal_background.visible = false
+                    confirm_new_rack_modal.visible = false
+                }
+            }
+
+            Text {
+                id: confirm_scan5
+                x: 4
+                y: 2
+                width: 347
+                height: 68
+                color: "#ffffff"
+                text: qsTr("No")
+                font.pixelSize: 47
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                font.styleName: "Bold"
+                font.weight: Font.Bold
+                minimumPixelSize: 23
+                styleColor: "#011ca1"
+                textFormat: Text.PlainText
+                style: Text.Raised
+                font.family: "Times New Roman"
+                font.bold: true
+            }
+        }
+    }
 }
+
+
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.5}
+    D{i:0;formeditorZoom:0.5}D{i:32}
 }
 ##^##*/

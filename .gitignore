@@ -16,3 +16,7 @@ src/pymaging-png/
 src/pymaging/
 
 *.autosave
+
+main.pyproject.user
+
+*.zip

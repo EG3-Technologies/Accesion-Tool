@@ -18,3 +18,5 @@ src/pymaging/
 *.autosave
 
 main.pyproject.user
+
+*.zip

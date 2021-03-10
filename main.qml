@@ -69,7 +69,7 @@ Window {
         var ampm = hours >= 12 ? 'pm' : 'am';
         hours = hours % 12;
         hours = hours ? hours : 12; // the hour '0' should be '12'
-        var current_date_format = ("0" + (current_datetime.getMonth()+1)).slice(-2)  + "/" + ("0" + (current_datetime.getDate())).slice(-2) + "/" + current_datetime.getFullYear() + " " +
+        var current_date_format = ("0" + (current_datetime.getMonth()+1)).slice(-2)  + "/" + ("0" + current_datetime.getDate()).slice(-2) + "/" + current_datetime.getFullYear() + " " +
                 ("0" + hours).slice(-2) + ":" + ("0" + current_datetime.getMinutes()).slice(-2) + " " + ampm.toUpperCase()
         date_time_label.text = current_date_format
     }
@@ -80,7 +80,7 @@ Window {
         var ampm = hours >= 12 ? 'pm' : 'am';
         hours = hours % 12;
         hours = hours ? hours : 12; // the hour '0' should be '12'
-        var current_date_format = ("0" + current_datetime.getMonth()+1).slice(-2)  + "/" + ("0" + (current_datetime.getDate())).slice(-2) + "/" + current_datetime.getFullYear() + " " +
+        var current_date_format = ("0" + (current_datetime.getMonth()+1)).slice(-2)  + "/" + ("0" + current_datetime.getDate()).slice(-2) + "/" + current_datetime.getFullYear() + " " +
                 ("0" + hours).slice(-2) + ":" + ("0" + current_datetime.getMinutes()).slice(-2) + " " + ampm.toUpperCase()
         return current_date_format
     }
@@ -95,7 +95,7 @@ Window {
 
     function get_date(){
         var current_datetime = new Date();
-        var date = ("0" + current_datetime.getMonth()+1).slice(-2)  + "/" + ("0" + (current_datetime.getDate())).slice(-2) + "/" + current_datetime.getFullYear();
+        var date = ("0" + (current_datetime.getMonth()+1)).slice(-2)  + "/" + ("0" + current_datetime.getDate()).slice(-2) + "/" + current_datetime.getFullYear();
         return date;
     }
 
@@ -210,7 +210,7 @@ Window {
                             barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well +'", "t": "'+get_time_base60() + '" }')
                             barcode_tubes.push('{"ttuid": "'+current_scan_json.ttuid+'", "well": "'+current_scan_json.well+'" }')
                             var data_tubes = '{"rackid": "' + rack_id + '","' +'"date":'+ get_date() +'",data": [' + barcode_tubes + ']}'
-                                                        //Advnace well position
+                            //Advnace well position
                             if(well_col % 4 === 0){
                                 well_row = String.fromCharCode(well_row.charCodeAt() + 1);
                                 well_col = 1
@@ -319,7 +319,7 @@ Window {
             Image {
                 id: barcode_tubes_img
                 x: 457
-                y: 550
+                y: 554
                 width: 329
                 height: 329
                 source: "current_tubes_barcode.png"
@@ -336,7 +336,7 @@ Window {
                 id: barcode_users_img
                 cache: false
                 x: 31
-                y: 549
+                y: 553
                 width: 329
                 height: 329
                 source: "current_users_barcode.png"
@@ -352,7 +352,7 @@ Window {
                 id: rack_grid
                 objectName: "rack_grid"
                 x: 12
-                y: 80
+                y: 87
                 width: 793
                 height: 404
                 flickableDirection: Flickable.VerticalFlick
@@ -482,10 +482,10 @@ Window {
             Text {
                 id: user_barcode_lbl
                 x: 31
-                y: 525
+                y: 528
                 width: 329
                 height: 23
-                text: qsTr("User's Barcode")
+                text: qsTr("SID Barcode")
                 font.pixelSize: 19
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -494,10 +494,10 @@ Window {
             Text {
                 id: user_barcode_lbl1
                 x: 457
-                y: 526
+                y: 531
                 width: 329
                 height: 23
-                text: qsTr("Test Tubes Barcode")
+                text: qsTr("TTUID Barcode")
                 font.pixelSize: 19
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -505,8 +505,8 @@ Window {
 
             Text {
                 id: rack_id_lbl
-                x: 31
-                y: 8
+                x: 8
+                y: 5
                 width: 290
                 height: 22
                 color: "#000000"
@@ -522,8 +522,8 @@ Window {
 
             Text {
                 id: test_tube_count_lbl
-                x: 333
-                y: 8
+                x: 335
+                y: 5
                 width: 201
                 height: 22
                 color: "#000000"
@@ -561,6 +561,26 @@ Window {
                 font.pixelSize: 13
                 horizontalAlignment: Text.AlignHCenter
                 font.styleName: "Bold"
+            }
+
+            Text {
+                id: text10
+                x: 324
+                y: 48
+                width: 313
+                height: 41
+                text: qsTr("Print: ______________________")
+                font.pixelSize: 26
+            }
+
+            Text {
+                id: text9
+                x: 8
+                y: 47
+                width: 309
+                height: 41
+                text: qsTr("Sign: ______________________")
+                font.pixelSize: 26
             }
 
 
@@ -1287,6 +1307,6 @@ Window {
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.5}
+    D{i:0;formeditorZoom:0.5}D{i:32}
 }
 ##^##*/

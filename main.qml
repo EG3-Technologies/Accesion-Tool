@@ -618,7 +618,7 @@ Window {
 
                     print_area.grabToImage(function(result) {
                         result.saveToFile("something.png");
-                    }, Qt.size( 2455, 2792));
+                    }, Qt.size( 5060, 5634));
 
                     barcode_utils.handle_print()
 

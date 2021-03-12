@@ -10,12 +10,44 @@ import qrcode
 import treepoem
 import base64
 import gzip
+import unittest
+import json
+
+
+class TestBarcodes(unittest.TestCase):
+    def test_barcode_data():
+        result_string = ""
+        for x in range(45):
+            sid = ''.join(random.choices(string.ascii_uppercase + string.digits, k=11))
+            ttuid = ''.join(random.choices(string.ascii_uppercase + string.digits, k=11))
+            time = ''.join(random.choices(string.ascii_uppercase + string.digits, k=3))
+            sid_json = {"well":"","sid":"","t":""}
+            ttuid_json = {"well":"","ttuid":""}
+            sid_json["well"] = "wP"
+            sid_json["sid"] = sid
+            sid_json["t"] = time
+            ttuid_json["well"] = "wP"
+            ttuid_json["ttuid"] = ttuid
+            print(sid_json)
+            print(ttuid_json)
+
 
 
 class BarcodeUtils(QObject):
     @Slot(str)
     def print_data(self, string):
         print(string)
+
+    @Slot(str)
+    def generate_slide_barcode(self, slide_barcode):
+        image_slide_code = treepoem.generate_barcode(
+            barcode_type='code128',
+            data=slide_barcode,
+            options={"width":5,"height":1},
+        )
+        # image_users.convert('1').save(users_barcode_filename)
+        image_slide_code.convert('1').save("current_slide_barcode.png")
+
 
     @Slot(str, str, str, str, str)
     def generate_barcode(self, user_barcode, tube_barcode, barcode_data, directory, filename):

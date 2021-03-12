@@ -9,15 +9,18 @@ Window {
     title: qsTr("Tube Scanning Application")
     readonly property string label_waiting_id: "Waiting on ID Scan"
     readonly property string label_waiting_rackid: "Waiting on Rack ID Scan"
+    readonly property string label_waiting_slideid: "Waiting on Slide ID Scan"
     readonly property string label_waiting_tube: "Waiting on Tube Scan"
     readonly property string label_rack_id: "Rack ID: "
     readonly property string label_tube_count: "Test Tube Count: "
+    readonly property string label_slide_id: "Slide ID: "
     readonly property int max_tube_count: 48
     property var barcode_data: []
     property var barcode_users: []
     property var barcode_tubes: []
     property variant current_scan_json: {"well": "", "sid": "", "ttuid": "", "datetime" : ""}
     property string rack_id: ""
+    property string slide_id: ""
     property string well_row: "A"
     property variant well_col: 1
     property int tube_count: 0
@@ -25,7 +28,7 @@ Window {
     property string last_color: ""
     property string file_name: ""
     property string file_directory: ""
-    property variant calibrant_locations: ["A1","E1", "I1"]
+    property variant calibrant_locations: ["A1","E1","I1"]
     property variant is_calibrant_locked: true
     property variant recent_undo: false
     property variant minutes_seconds_map: ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X"]
@@ -33,9 +36,14 @@ Window {
     function reset_data(){
         date_time_label.text = ""
         rack_id_lbl.text = ""
+        slide_id_lbl.text = ""
         current_scan_json.well = ""
         current_scan_json.sid = ""
         current_scan_json.ttuid = ""
+        slide_barcode_img.visible = false
+        barcode_users_img.visible = false
+        barcode_tubes_img.visible = false
+
         well_col = 1
         well_row = "A"
         rack_id = ""
@@ -154,6 +162,18 @@ Window {
                     populate_date_field()
                     rack_id = scan_input.text
                     rack_id_lbl.text = label_rack_id + rack_id
+                    status_text.text = label_waiting_slideid
+                    scan_input.text = ""
+                    status_text.forceLayout()
+                }else if(status_text.text === label_waiting_slideid){
+                    //Rack ID
+                    print("setting slide id")
+                    slide_id = scan_input.text
+                    barcode_utils.generate_slide_barcode(slide_id)
+                    slide_barcode_img.reloadImage()
+                     slide_barcode_img.reloadImage()
+                    slide_id_lbl.text = label_slide_id + slide_id
+
                     status_text.text = label_waiting_id
                     scan_input.text = ""
                     status_text.forceLayout()
@@ -181,10 +201,14 @@ Window {
                     tube_count++
                     test_tube_count_lbl.text = label_tube_count + tube_count
 
+
                     well_model.append(current_scan_json)
                     barcode_data.push(JSON.stringify(current_scan_json))
-                    barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well +'", "t": "'+get_time_base60() + '" }')
-                    barcode_tubes.push('{"ttuid": "'+current_scan_json.ttuid+'", "well": "'+current_scan_json.well+'" }')
+                    if(current_scan_json.sid !== "E"){
+                        barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well +'", "t": "'+get_time_base60() + '" }')
+                        barcode_tubes.push('{"ttuid": "'+current_scan_json.ttuid+'", "well": "'+current_scan_json.well+'" }')
+
+                    }
                     sid_confirmation_label.text = current_scan_json.sid
                     ttuid_confirmation_label.text = current_scan_json.ttuid
                     current_scan_json.well = ""
@@ -209,8 +233,12 @@ Window {
                             current_scan_json.datetime = get_datetime_formatted()
                             well_model.append(current_scan_json)
                             barcode_data.push(JSON.stringify(current_scan_json))
-                            barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well +'", "t": "'+get_time_base60() + '" }')
-                            barcode_tubes.push('{"ttuid": "'+current_scan_json.ttuid+'", "well": "'+current_scan_json.well+'" }')
+                            if(current_scan_json.sid !== "E"){
+                                barcode_users.push('{"sid": "'+current_scan_json.sid+'", "well": "'+current_scan_json.well +'", "t": "'+get_time_base60() + '" }')
+                                barcode_tubes.push('{"ttuid": "'+current_scan_json.ttuid+'", "well": "'+current_scan_json.well+'" }')
+
+                            }
+
                             var data_tubes = '{"rackid": "' + rack_id + '","' +'"date":'+ get_date() +'",data": [' + barcode_tubes + ']}'
                             //Advnace well position
                             if(well_col % 4 === 0){
@@ -223,7 +251,8 @@ Window {
                         data_tubes = '{"rackid": "' + rack_id + '","' +'"date":'+ get_date() +'",data": [' + barcode_tubes + ']}'
                         data_sid = '{"rackid": "' + rack_id + '", "data": [' + barcode_users + ']}'
                         barcode_utils.generate_barcode(data_sid, data_tubes, barcode_data, file_directory, file_name)
-
+                        barcode_users_img.reloadImage()
+                        barcode_tubes_img.reloadImage()
                     }
                     if(barcode_data.length >= max_tube_count){
                         status_text.text = "Rack Full!"
@@ -324,10 +353,12 @@ Window {
                 y: 554
                 width: 329
                 height: 329
+                visible: false
                 source: "current_tubes_barcode.png"
                 cache: false
                 fillMode: Image.PreserveAspectFit
                 function reloadImage() {
+                    visible = true
                     let oldSource = source
                     source = ""
                     source = oldSource
@@ -341,9 +372,11 @@ Window {
                 y: 553
                 width: 329
                 height: 329
+                visible: false
                 source: "current_users_barcode.png"
                 fillMode: Image.PreserveAspectFit
                 function reloadImage() {
+                    visible = true
                     let oldSource = source
                     source = ""
                     source = oldSource
@@ -354,9 +387,10 @@ Window {
                 id: rack_grid
                 objectName: "rack_grid"
                 x: 12
-                y: 87
+                y: 125
                 width: 793
                 height: 404
+                interactive: false
                 flickableDirection: Flickable.VerticalFlick
                 snapMode: GridView.NoSnap
                 keyNavigationWraps: false
@@ -484,11 +518,11 @@ Window {
             Text {
                 id: user_barcode_lbl
                 x: 31
-                y: 528
+                y: 534
                 width: 329
                 height: 23
                 text: qsTr("SID Barcode")
-                font.pixelSize: 19
+                font.pixelSize: 14
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
@@ -496,11 +530,11 @@ Window {
             Text {
                 id: user_barcode_lbl1
                 x: 457
-                y: 531
+                y: 535
                 width: 329
                 height: 23
                 text: qsTr("TTUID Barcode")
-                font.pixelSize: 19
+                font.pixelSize: 14
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
@@ -517,7 +551,7 @@ Window {
                 style: Text.Raised
                 font.styleName: "Bold"
                 font.weight: Font.Bold
-                styleColor: "#0712a7"
+                styleColor: "#999999"
                 font.family: "Verdana"
                 font.bold: true
             }
@@ -532,7 +566,7 @@ Window {
                 text: qsTr("Test Tube Count:")
                 font.pixelSize: 16
                 style: Text.Raised
-                styleColor: "#000000"
+                styleColor: "#999999"
                 font.bold: true
                 font.styleName: "Bold"
                 font.weight: Font.Bold
@@ -567,22 +601,55 @@ Window {
 
             Text {
                 id: text10
-                x: 324
-                y: 48
+                x: 329
+                y: 56
                 width: 313
                 height: 41
-                text: qsTr("Print: ______________________")
+                text: qsTr("Print: ________________")
                 font.pixelSize: 26
             }
 
             Text {
                 id: text9
                 x: 8
-                y: 47
+                y: 56
                 width: 309
                 height: 41
-                text: qsTr("Sign: ______________________")
+                text: qsTr("Sign: ________________")
                 font.pixelSize: 26
+            }
+
+            Image {
+                id: slide_barcode_img
+                x: 637
+                y: 84
+                visible: false
+                width: 178
+                height: 24
+                source: "current_slide_barcode.png"
+                cache: false
+                sourceSize.width: 260
+                fillMode: Image.PreserveAspectFit
+                function reloadImage() {
+                    visible = true
+                    let oldSource = source
+                    source = ""
+                    source = oldSource
+                }
+            }
+
+            Text {
+                id: slide_id_lbl
+                x: 637
+                y: 56
+                width: 178
+                height: 26
+                text: qsTr("Slide ID: ")
+                font.pixelSize: 10
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                minimumPixelSize: 12
+                font.styleName: "Bold"
             }
 
 
@@ -618,7 +685,7 @@ Window {
 
                     print_area.grabToImage(function(result) {
                         result.saveToFile("something.png");
-                    }, Qt.size( 5060, 5634));
+                    }, Qt.size( 4900, 5414));
 
                     barcode_utils.handle_print()
 
@@ -819,6 +886,7 @@ Window {
                 anchors.fill: parent
                 onClicked: {
                     print("new rack creation")
+
                     confirm_new_rack_modal.visible = true
                     modal_background.visible = true
                 }
@@ -877,7 +945,7 @@ Window {
             id: gridView
             x: 1402
             y: 68
-            width: 330
+            width: 289
             height: 860
             interactive: false
             boundsBehavior: Flickable.OvershootBounds
@@ -1436,6 +1504,6 @@ Window {
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.5}D{i:32}
+    D{i:0;formeditorZoom:0.66}D{i:99}
 }
 ##^##*/

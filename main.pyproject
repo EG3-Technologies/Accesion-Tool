@@ -1,3 +1,3 @@
 {
-    "files": ["main.py","Images/lightblueback.jpg","Images/BlueBackground.jpg","animations/waiting_scan_loader.gif","Images/blueBack.jpg","main.qml","Images/spectrapass_logo.png"]
+    "files": ["Images/lightblueback.jpg","Images/blueBack.jpg","Images/BlueBackground.jpg","main.qml","animations/waiting_scan_loader.gif","Images/spectrapass_logo.png","main.py","barcodetests.h","barcodetests.cpp"]
 }
